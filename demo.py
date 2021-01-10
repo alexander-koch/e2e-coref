@@ -41,7 +41,8 @@ def make_predictions(text, model):
   return example
 
 if __name__ == "__main__":
-  tf.compat.v1.disable_eager_execution()
+ # tf.compat.v1.disable_eager_execution()
+  tf.compat.v1.disable_v2_behavior()
   config = util.initialize_from_env()
   model = cm.CorefModel(config)
   with tf.compat.v1.Session() as session:

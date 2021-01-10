@@ -239,6 +239,9 @@ class CorefModel(object):
     head_emb_list = [head_word_emb]
 
     if self.config["char_embedding_size"] > 0:
+      print("=== embedding ===")
+      print(len(self.char_dict), self.config["char_embedding_size"])
+      print(num_sentences, max_sentence_length)
       char_emb = tf.gather(tf.compat.v1.get_variable("char_embeddings", [len(self.char_dict), self.config["char_embedding_size"]]), char_index) # [num_sentences, max_sentence_length, max_word_length, emb]
       flattened_char_emb = tf.reshape(char_emb, [num_sentences * max_sentence_length, util.shape(char_emb, 2), util.shape(char_emb, 3)]) # [num_sentences * max_sentence_length, max_word_length, emb]
       flattened_aggregated_char_emb = util.cnn(flattened_char_emb, self.config["filter_widths"], self.config["filter_size"]) # [num_sentences * max_sentence_length, emb]
@@ -466,8 +469,8 @@ class CorefModel(object):
           cell_fw = util.CustomLSTMCell(self.config["contextualization_size"], num_sentences, self.lstm_dropout)
         with tf.compat.v1.variable_scope("bw_cell"):
           cell_bw = util.CustomLSTMCell(self.config["contextualization_size"], num_sentences, self.lstm_dropout)
-        state_fw = tf.nn.rnn_cell.LSTMStateTuple(tf.tile(cell_fw.initial_state.c, [num_sentences, 1]), tf.tile(cell_fw.initial_state.h, [num_sentences, 1]))
-        state_bw = tf.nn.rnn_cell.LSTMStateTuple(tf.tile(cell_bw.initial_state.c, [num_sentences, 1]), tf.tile(cell_bw.initial_state.h, [num_sentences, 1]))
+        state_fw = tf.compat.v1.nn.rnn_cell.LSTMStateTuple(tf.tile(cell_fw.initial_state.c, [num_sentences, 1]), tf.tile(cell_fw.initial_state.h, [num_sentences, 1]))
+        state_bw = tf.compat.v1.nn.rnn_cell.LSTMStateTuple(tf.tile(cell_bw.initial_state.c, [num_sentences, 1]), tf.tile(cell_bw.initial_state.h, [num_sentences, 1]))
 
         (fw_outputs, bw_outputs), _ = tf.compat.v1.nn.bidirectional_dynamic_rnn(
           cell_fw=cell_fw,

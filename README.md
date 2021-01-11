@@ -7,6 +7,8 @@ This repository contains the code for replicating results from
 * [Kenton Lee](http://kentonl.com/), [Luheng He](https://homes.cs.washington.edu/~luheng), and [Luke Zettlemoyer](https://www.cs.washington.edu/people/faculty/lsz)
 * In NAACL 2018
 
+modified to work in tensorflow 2 compatibility mode with tensorflow 1
+
 ## Getting Started
 
 * Install python (either 2 or 3) requirements: `pip install -r requirements.txt`
